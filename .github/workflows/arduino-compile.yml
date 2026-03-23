@@ -1,0 +1,61 @@
+# Cross-compiles Master.ino and Slave.ino for the ESP32-S3 target using
+# arduino/compile-sketches.  This catches syntax errors, missing headers,
+# and type mismatches without requiring physical hardware.
+#
+# Triggered on every push/PR that touches the firmware or this workflow file.
+
+name: Compile Arduino Sketches
+
+on:
+  push:
+    paths:
+      - 'Software/Master_Slave_Web_Server/**'
+      - '.github/workflows/arduino-compile.yml'
+  pull_request:
+    paths:
+      - 'Software/Master_Slave_Web_Server/**'
+      - '.github/workflows/arduino-compile.yml'
+
+jobs:
+  compile:
+    name: Compile ${{ matrix.sketch }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false   # show all failures, not just the first
+      matrix:
+        sketch:
+          - Software/Master_Slave_Web_Server/Master
+          - Software/Master_Slave_Web_Server/Slave
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile sketch
+        uses: arduino/compile-sketches@v1
+        with:
+          # ESP32-S3 – matches the PD Stepper board MCU
+          fqbn: esp32:esp32:esp32s3
+
+          sketch-paths: |
+            - ${{ matrix.sketch }}
+
+          # Install the ESP32 board support package from Espressif
+          platforms: |
+            - name: esp32:esp32
+              source-url: >-
+                https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+
+          # Libraries used by both sketches
+          libraries: |
+            - name: TMC2209
+            - source-url: >-
+                https://github.com/ESP32Async/ESPAsyncWebServer/archive/refs/heads/main.zip
+              name: ESPAsyncWebServer
+            - source-url: >-
+                https://github.com/ESP32Async/AsyncTCP/archive/refs/heads/main.zip
+              name: AsyncTCP
+
+          # Surface compiler warnings as annotations in the PR
+          enable-warnings-report: true

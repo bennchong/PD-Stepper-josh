@@ -1,0 +1,57 @@
+# Doxyfile for PD Stepper Master/Slave Web Server
+#
+# Generate documentation with:
+#   cd Software/Master_Slave_Web_Server
+#   doxygen Doxyfile
+#
+# PlantUML diagrams require Java and plantuml.jar on your PATH, or set
+# PLANTUML_JAR_PATH below.  Download from https://plantuml.com/download
+#
+# Output is written to docs/html/index.html
+
+PROJECT_NAME           = "PD Stepper Master/Slave Web Server"
+PROJECT_NUMBER         = 1.0
+PROJECT_BRIEF          = "ESP32-S3 firmware – master controls slave stepper over WiFi"
+OUTPUT_DIRECTORY       = docs
+
+# Input
+INPUT                  = Master/Master.ino \
+                         Slave/Slave.ino
+FILE_PATTERNS          = *.ino *.h
+RECURSIVE              = NO
+EXTENSION_MAPPING      = ino=C++
+
+# Extraction settings
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Output formats
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_MAN           = NO
+
+HTML_OUTPUT            = html
+HTML_EXTRA_STYLESHEET  =
+HTML_COLORSTYLE        = DARK
+
+# Diagrams
+HAVE_DOT               = NO     # set YES if Graphviz is installed
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+
+# PlantUML
+PLANTUML_JAR_PATH      =        # e.g. /usr/share/plantuml/plantuml.jar
+PLANTUML_CFG_FILE      =
+PLANTUML_INCLUDE_PATH  =
+
+# Preprocessing
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = NO
+
+# Miscellaneous
+QUIET                  = NO
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+GENERATE_TREEVIEW      = YES
