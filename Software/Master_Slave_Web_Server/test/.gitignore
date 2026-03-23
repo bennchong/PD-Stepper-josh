@@ -1,0 +1,4 @@
+# Compiled test binaries – never commit these
+test_master
+test_slave
+*.o
